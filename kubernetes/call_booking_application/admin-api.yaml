@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: admin-api
+  namespace: default
+  labels:
+    app: admin-api
+spec:
+  containers:
+  - name: admin-api
+    image: us-central1-docker.pkg.dev/optimal-harbor-386603/bhargava/admin-api 
+    resources:
+      limits:
+        cpu: 200m
+        memory: 500Mi
+      requests:
+        cpu: 100m
+        memory: 200Mi
+    env:
+    - name: MONGO_URL
+      valueFrom:
+        configMapKeyRef:
+          name: myconfigs
+          key: MONGO_URL
+    - name: ADMIN_EMAIL
+      valueFrom:
+        configMapKeyRef:
+          name: myconfigs
+          key: ADMIN_EMAIL
+    ports:
+    - name: admin-api-port
+      containerPort: 1004

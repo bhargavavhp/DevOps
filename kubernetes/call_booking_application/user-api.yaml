@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: user-api
+  namespace: default
+  labels:
+    app: call-book
+spec:
+  containers:
+  - name: user-api
+    image: us-central1-docker.pkg.dev/optimal-harbor-386603/bhargava/user-api 
+    resources:
+      limits:
+        cpu: 200m
+        memory: 500Mi
+      requests:
+        cpu: 100m
+        memory: 200Mi
+    env:
+    - name: MONGO_URL
+      valueFrom:
+        configMapKeyRef:
+          name: myconfigs
+          key: MONGO_URL
+    - name: ADMIN_EMAIL
+      valueFrom:
+        configMapKeyRef:
+          name: myconfigs
+          key: ADMIN_EMAIL
+    ports:
+    - name: user-api-port
+      containerPort: 1004
+      hostPort: 1004

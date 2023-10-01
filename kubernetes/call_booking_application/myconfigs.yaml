@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfigs
+  labels:
+    app: call-book
+data:
+  MONGO_INITDB_ROOT_USERNAME: mongoadmin
+  MONGO_INITDB_DATABASE: my_db
+  MONGO_URL: mongodb://mongoadmin:secret@35.202.252.101:27017/?retryWrites=true&w=majority
+  ADMIN_EMAIL: bhargavavhp@gmail.com

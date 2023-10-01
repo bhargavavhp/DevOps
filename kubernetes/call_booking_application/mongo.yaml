@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mongodb
+  namespace: default
+  labels:
+    app: call-book
+spec:
+  containers:
+  - name: mongodb
+    image: mongo
+    resources:
+      limits:
+        cpu: 200m
+        memory: 500Mi
+      requests:
+        cpu: 100m
+        memory: 200Mi
+    env:
+    - name: MONGO_INITDB_ROOT_USERNAME
+      valueFrom:
+        configMapKeyRef:
+          name: myconfigs
+          key: MONGO_INITDB_ROOT_USERNAME
+    - name: MONGO_INITDB_ROOT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: mysecrets
+          key: MONGO_INITDB_ROOT_PASSWORD
+    - name: MONGO_INITDB_DATABASE
+      valueFrom:
+        configMapKeyRef:
+          name: myconfigs
+          key: MONGO_INITDB_DATABASE
+    ports:
+    - name: mongo-port
+      containerPort: 27017
