@@ -62,6 +62,7 @@
           - print the uptime of system
           - sample.txt copied to all nodes
           - sample1.txt copied to node2
+          - template.conf on the nodes should be rendered
 
 - hosts: customone
   tasks:
