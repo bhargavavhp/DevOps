@@ -1,0 +1,80 @@
+---
+- hosts: mynodes
+  become: yes
+  gather_facts: true
+  tasks:
+    - name: copy test file contents to node1 and node2
+      copy:
+        src: /home/ubuntu/test.txt
+        dest: /home/ubuntu/sample.txt
+    - name: add host to inventory
+      add_host:
+        hostname: 54.82.36.106
+        groups: customone
+    - name: get uptime of system
+      shell: /usr/bin/uptime
+      register: result
+    - name: using debug module
+      debug:
+        msg: uptime of the system is {{ result.stdout_lines[0] }}
+    - name: install nginx using apt
+      apt:
+        name: nginx
+        state: present
+        update_cache: true
+    - name: fetch sample.txt
+      fetch:
+        src: /home/ubuntu/sample.txt
+        dest: /home/ubuntu/sample_fetched.txt
+    - name: using template to copy and substitute
+      template:
+        src: /home/ubuntu/templates/template.j2
+        dest: /home/ubuntu/template.conf
+    - name: service module to start nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+    - name: add john user
+      user:
+        name: john
+        state: present
+    - name: change password using expect module
+      expect:
+        command: passwd john
+        responses:
+          (?i)password: "test"
+    - name: set a dynamic variable
+      set_fact:
+        my_var: "random_value"
+    - name: print dynamic variable
+      debug:
+        var: my_var
+
+    - name: print output
+      debug:
+        msg:
+          - By the end of this play you should have below items
+          - nginx installed started on nodes
+          - sample_fetched.txt on localhost
+          - john user added
+          - can get output of my_var as random_value
+          - print the uptime of system
+          - sample.txt copied to all nodes
+          - sample1.txt copied to node2
+
+- hosts: customone
+  tasks:
+    - name: executing from node2
+      copy:
+        src: /home/ubuntu/test.txt
+        dest: /home/ubuntu/sample1.txt
+
+- hosts: localhost
+  become: yes
+  tasks:
+    - name: install git
+      apt:
+        name: git
+        state: present
+        update_cache: true
