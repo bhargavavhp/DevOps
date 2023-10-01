@@ -1,0 +1,21 @@
+---
+- name: Deploy Kubernetes Services and Deployments
+  hosts: localhost
+  gather_facts: true
+  tasks: 
+    - name: get users home dir
+      become: yes
+      become_user: "{{ username }}"
+      shell: echo $HOME
+      register: home_dir
+
+    - name: Apply Services
+      command: kubectl apply -f svc.yaml
+      args:
+        chdir: "{{ home_dir.stdout }}/kubernetes/deploy_k8s_with_shell_script/"
+
+    - name: Apply Deployments
+      command: kubectl apply -f test.yaml
+      args:
+        chdir: "{{ home_dir.stdout }}/kubernetes/deploy_k8s_with_shell_script/"
+

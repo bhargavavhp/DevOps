@@ -1,0 +1,21 @@
+---
+- name: Deploy Kubernetes Services and Deployments
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: get users home dir
+      become: yes
+      become_user: "{{ username }}"
+      shell: echo $HOME
+      register: home_dir
+
+    - name: Delete Services
+      command: kubectl delete -f svc.yaml
+      args:
+        chdir: "{{ home_dir.stdout }}/kubernetes/deploy_k8s_with_shell_script/"
+
+    - name: Delete Deployments
+      command: kubectl delete -f test.yaml
+      args:
+        chdir: "{{ home_dir.stdout }}/kubernetes/deploy_k8s_with_shell_script/"
+

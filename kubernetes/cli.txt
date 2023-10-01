@@ -1,0 +1,14 @@
+## POD
+kubectl run nginx --image=nginx
+kubectl run hazelcast --image=hazelcast/hazelcast --labels="app=hazelcast,env=prod"
+kubectl run -i -t busybox --image=busybox --restart=Never
+## Namespace
+kubectl create namespace my-namespace
+## Deployment
+kubectl create deployment my-dep --image=busybox
+kubectl create deployment my-dep --image=nginx --replicas=3
+## ConfigMap
+kubectl create configmap my-config --from-file=path/to/bar
+kubectl create configmap my-config --from-literal=key1=config1 --from-literal=key2=config2
+## Secret
+kubectl create secret generic my-secret --from-literal=key1=confidential --from-literal=key2=supersecret
