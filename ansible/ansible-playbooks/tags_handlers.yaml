@@ -1,0 +1,26 @@
+---
+- name: install tools
+  hosts: mynodes
+  tasks:
+  - name: install nginx, git
+    block:
+      - name: installing nginx
+        apt:
+          name: nginx
+          state: present
+          update_cache: true
+        tags: install-nginx
+        notify: start nginx
+      - name: installing git
+        apt:
+          name: git
+          state: present
+          update_cache: true
+        tags: install-git
+    when: ansible_distribution == 'Ubuntu'
+    become: yes
+  handlers:
+    - name: start nginx
+      service:
+        name: nginx
+        state: started

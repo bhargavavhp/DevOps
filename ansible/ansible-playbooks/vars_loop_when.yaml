@@ -1,0 +1,16 @@
+---
+- name: installing git, tree
+  hosts: mynodes
+  become: yes
+  vars:
+    tools:
+      - git
+      - tree
+  tasks:
+    - name: installing tools
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+      when: ansible_distribution == 'Ubuntu'
+      loop: "{{ tools }}"
