@@ -1,8 +1,0 @@
----
-- name: install waeavenet on k8s cluster
-  hosts: k8s-master
-  become: yes
-  tasks:
-    - name: apply weavenet command
-      shell: 'kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml'
-
