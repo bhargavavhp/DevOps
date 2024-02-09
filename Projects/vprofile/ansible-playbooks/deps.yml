@@ -1,0 +1,59 @@
+---
+- name: install dependencies
+  hosts: localhost
+  become: yes
+  tasks:
+    #### for apt installation, change yum to apt ###
+    #    - name: install "{{ item }}"
+    #      yum:
+    #        name: "{{ item }}"
+    #        update_cache: yes
+    #        state: present
+    #      with_items:
+    #        - git
+    #        - ca-certificates
+    #        - curl-minimal.x86_64
+    #    - name: install keyrings
+    #      shell: "install -m 0755 -d /etc/apt/keyrings"
+    #    - name: get GPG file for docker
+    #      ansible.builtin.uri:
+    #        url: https://download.docker.com/linux/ubuntu/gpg
+    #        dest: /etc/apt/keyrings/docker.asc
+    #    - name: set permissions for GPG file
+    #      ansible.builtin.file:
+    #        path: /etc/apt/keyrings/docker.asc
+    #        mode: a+r
+    #
+    #    - name: add repo to apt resouces
+    - name: install yum utils
+      yum:
+        name: yum-utils
+        update_cache: true
+        state: present
+    - name: add docker repo to yum
+      yum_repository:
+        name: docker-ce
+        description: Docker CE Repository
+        baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
+        gpgcheck: yes
+        gpgkey: https://download.docker.com/linux/centos/gpg
+        enabled: yes
+    - name: install docker
+      yum:
+        name: "{{ item }}"
+        update_cache: true
+        state: present
+      with_items:
+        - docker-ce 
+        - docker-ce-cli 
+        - containerd.io 
+        - docker-buildx-plugin 
+        - docker-compose-plugin
+    - name: start docker
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+
+
