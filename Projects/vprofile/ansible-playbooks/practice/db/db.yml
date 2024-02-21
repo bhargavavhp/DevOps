@@ -1,0 +1,23 @@
+---
+- name: configure database MySQL
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - debug:
+        var: ansible_facts.all_ipv4_addresses
+    - name: get ips
+      set_fact:
+        ip_addr: "{{ ansible_facts.eth0.ipv4.address }}" #"{{ ansible_facts.all_ipv4_addresses }}"
+    - debug:
+        var: ip_addr
+    - name: copy all ips to file
+      blockinfile:
+        path: /etc/hosts
+        block: |
+          {{ inventory_hostname }}  {{ ansible_facts.eth0.ipv4.address }}
+          #      loop:
+          #- "{{ ip_addr }}"
+      delegate_to: localhost
+
+
