@@ -1,0 +1,25 @@
+node {
+    stage('Reading the file') {
+        echo "Reading the file..."
+        sh 'cat /home/ubuntu/new/app.py'
+    }
+
+    stage('Executing the file') {
+        def fileExists = fileExists('/home/ubuntu/new/app.py')
+        if (!fileExists) {
+            error "File doesn't exist"
+        } else {
+            timeout(time: 3, unit: 'MINUTES') {
+                input message: 'Do you want to execute the file?', ok: 'Yes'
+            }
+            sh 'python3 /home/ubuntu/new/app.py'
+        }
+    }
+
+    stage('Build discard') {
+        echo "Build discard along with timestamp for each stage completed."
+        cleanWs()
+        properties([buildDiscarder(logRotator(numToKeepStr: '2')),])
+    }
+}
+
