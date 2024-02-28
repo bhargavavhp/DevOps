@@ -1,0 +1,23 @@
+Jenkins File Execution using Scripted Pipeline
+
+Getting Started
+
+Jenkins is already installed and running in the port 8080 inside the environment.
+
+A python file named "fact.py" will be present inside the path
+
+-/Desktop/Project/kickoffs-jenkins-file-execution-using-scripted-pipeline/Source_code/.
+
+1. Login to Jenkins wih username and password as "admin".
+
+2. Create a pipeline job named "Scripted-pipeline". 3. Write a Scripted pipeline script with three stages named "Reading the file", "Executing the file", "Build discard along with
+
+timestamp for each stages as follows. Configure the "Reading the file" stage to read and display the "fact.py" file present in the "Source_code" directory.
+
+Configue the "Executing the file" stage to check whether the "fact.py" file exists in the path, if exists clear the workspace. Add an input message as "Do you want to execute the file?", if yes, run the python file. If the file doesn't exists, it should retry for 3 times and return an error message as "File doesn't exist".
+
+Configure the "Build dicard" stage to discard the previous builds and have only the recent 2 builds.
+
+4. Apply the changes and build your job.
+
+5. Once done, check your result in the console output.
